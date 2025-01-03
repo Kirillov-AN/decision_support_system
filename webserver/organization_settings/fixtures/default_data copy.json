@@ -1,0 +1,180 @@
+[
+    {
+        "model": "organization_settings.model",
+        "pk": 1,
+        "fields": {
+            "name": "Coffee Seed Supplier Evaluation"
+        }
+    },
+    {
+        "model": "organization_settings.model",
+        "pk": 2,
+        "fields": {
+            "name": "Cap Supplier Evaluation"
+        }
+    },
+    {
+        "model": "organization_settings.parameter",
+        "pk": 1,
+        "fields": {
+            "name": "Price",
+            "section": "base",
+            "value": 50,
+            "model": 1
+        }
+    },
+    {
+        "model": "organization_settings.parameter",
+        "pk": 2,
+        "fields": {
+            "name": "Quality",
+            "section": "base",
+            "value": 80,
+            "model": 1
+        }
+    },
+    {
+        "model": "organization_settings.parameter",
+        "pk": 3,
+        "fields": {
+            "name": "Freshness",
+            "section": "advanced",
+            "value": 90,
+            "model": 1
+        }
+    },
+    {
+        "model": "organization_settings.parameter",
+        "pk": 4,
+        "fields": {
+            "name": "Price",
+            "section": "base",
+            "value": 60,
+            "model": 2
+        }
+    },
+    {
+        "model": "organization_settings.parameter",
+        "pk": 5,
+        "fields": {
+            "name": "Durability",
+            "section": "base",
+            "value": 75,
+            "model": 2
+        }
+    },
+    {
+        "model": "organization_settings.parameter",
+        "pk": 6,
+        "fields": {
+            "name": "Delivery Time",
+            "section": "advanced",
+            "value": 40,
+            "model": 2
+        }
+    },
+    {
+        "model": "organization_settings.variant",
+        "pk": 1,
+        "fields": {
+            "name": "Supplier A (Coffee Seeds)",
+            "model": "Coffee Seed Supplier Evaluation"
+        }
+    },
+    {
+        "model": "organization_settings.variant",
+        "pk": 2,
+        "fields": {
+            "name": "Supplier B (Coffee Seeds)",
+            "model": "Coffee Seed Supplier Evaluation"
+        }
+    },
+    {
+        "model": "organization_settings.variant",
+        "pk": 3,
+        "fields": {
+            "name": "Supplier A (Caps)",
+            "model": "Cap Supplier Evaluation"
+        }
+    },
+    {
+        "model": "organization_settings.variant",
+        "pk": 4,
+        "fields": {
+            "name": "Supplier B (Caps)",
+            "model": "Cap Supplier Evaluation"
+        }
+    },
+    {
+        "model": "organization_settings.parameter_variant",
+        "pk": 1,
+        "fields": {
+            "variant": 1,
+            "parameter": 1,
+            "value": 45.0
+        }
+    },
+    {
+        "model": "organization_settings.parameter_variant",
+        "pk": 2,
+        "fields": {
+            "variant": 1,
+            "parameter": 2,
+            "value": 75.0
+        }
+    },
+    {
+        "model": "organization_settings.parameter_variant",
+        "pk": 3,
+        "fields": {
+            "variant": 2,
+            "parameter": 1,
+            "value": 55.0
+        }
+    },
+    {
+        "model": "organization_settings.parameter_variant",
+        "pk": 4,
+        "fields": {
+            "variant": 2,
+            "parameter": 2,
+            "value": 65.0
+        }
+    },
+    {
+        "model": "organization_settings.parameter_variant",
+        "pk": 5,
+        "fields": {
+            "variant": 3,
+            "parameter": 4,
+            "value": 62.0
+        }
+    },
+    {
+        "model": "organization_settings.parameter_variant",
+        "pk": 6,
+        "fields": {
+            "variant": 3,
+            "parameter": 5,
+            "value": 80.0
+        }
+    },
+    {
+        "model": "organization_settings.parameter_variant",
+        "pk": 7,
+        "fields": {
+            "variant": 4,
+            "parameter": 4,
+            "value": 70.0
+        }
+    },
+    {
+        "model": "organization_settings.parameter_variant",
+        "pk": 8,
+        "fields": {
+            "variant": 4,
+            "parameter": 5,
+            "value": 78.0
+        }
+    }
+]

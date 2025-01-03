@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -6,8 +7,19 @@
     <title>Главная страница</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
+        body {
+            background-image: url("{% static 'images/1.webp' %}");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
         .container {
             margin-top: 50px;
+            background-color: rgba(255, 255, 255, 1); /* Полностью белый */
+            border-radius: 10px;
+            padding: 40px; /* Увеличен padding */
+            max-width: 800px; /* Ограничение ширины */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Тень */
         }
         .section-link {
             margin-top: 30px;

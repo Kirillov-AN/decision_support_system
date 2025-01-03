@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+{% load static %}
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
@@ -6,23 +7,26 @@
     <title>Загрузка данных</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
+        body {
+            background-image: url("{% static 'images/1.webp' %}");
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
         .container {
             margin-top: 50px;
+            background-color: rgba(255, 255, 255, 1);
+            border-radius: 10px;
+            padding: 40px;
+            max-width: 1000px; /* Можно увеличить, чтобы шире был блок */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         .btn-container {
-            margin-top: 20px;
+            text-align: center;
         }
-        .textarea-container {
+        /* Обёртка для горизонтальной прокрутки */
+        .preview-table-container {
             margin-top: 20px;
-        }
-        .textarea-preview {
-            width: 100%;
-            height: 150px;
-            font-family: monospace;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            border: 1px solid #ccc;
-            padding: 10px;
         }
     </style>
 </head>
@@ -38,82 +42,185 @@
 <!-- ******CONTENT****** -->
 <main>
     <div class="container">
+        <!-- Выбор модели -->
+        <div class="form-group">
+            <label for="modelSelect">Выберите модель для загрузки данных:</label>
+            <select id="modelSelect" class="form-control">
+                <option value="">-- выберите модель --</option>
+                {% for model in models %}
+                    <option value="{{ model.id }}">{{ model.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
         <!-- Выбор файла -->
         <div class="form-group">
-            <label for="fileInput">Выберите файл для загрузки:</label>
+            <label for="fileInput">Выберите файл для загрузки (.csv, .xls, .xlsx):</label>
             <input type="file" class="form-control" id="fileInput" accept=".csv, .xls, .xlsx">
         </div>
 
         <!-- Предпросмотр данных -->
-        <div class="textarea-container">
-            <label for="filePreview">Предпросмотр данных:</label>
-            <textarea id="filePreview" class="textarea-preview" readonly>
-                Загружаемые данные будут отображаться здесь...
-            </textarea>
+        <div class="form-group preview-table-container">
+            <label>Предпросмотр загружаемой таблицы</label>
+
+            <!-- Горизонтальная прокрутка с Bootstrap -->
+            <div class="table-responsive">
+                <table id="previewTable" class="table table-striped table-bordered table-sm">
+                    <thead>
+                        <!-- В этот ряд добавляем имена параметров выбранной модели -->
+                        <tr id="modelParamsRow">
+                            <!-- Будет заполняться динамически через JS (на основе modelParams) -->
+                        </tr>
+                    </thead>
+                    <tbody id="fileDataRows">
+                        <!-- Здесь будет 10 строк из загруженного файла -->
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">
+                                Данные будут отображаться здесь после выбора файла...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
 
         <!-- Кнопки -->
-        <div class="btn-container text-center">
+        <div class="btn-container">
             <button class="btn btn-primary" id="loadDataBtn">Загрузить</button>
             <button class="btn btn-secondary" id="cancelBtn">Отменить</button>
         </div>
     </div>
 </main><!--//content-->
 
-<!-- ******FOOTER****** -->
-<footer class="footer">
-    <div class="container text-center">
-        <small class="copyright">Разработано  <i class="fa fa-heart"></i> для кофейни</small>
-    </div><!--//container-->
-</footer><!--//footer-->
-
 <!-- Скрипты -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js"></script>
+
 <script>
-    $(document).ready(function() {
-        // Обработчик выбора файла
-        $("#fileInput").on("change", function(e) {
-            var file = e.target.files[0];
-            if (file) {
-                var reader = new FileReader();
+    // Пример: данные имен параметров по каждой модели
+    var modelParams = JSON.parse('{{ modelParamsJson|safe }}');
 
-                // Чтение файла
-                reader.onload = function(event) {
-                    var data = event.target.result;
+    $(document).ready(function () {
+        // При смене модели выводим её параметры
+        $("#modelSelect").on("change", function () {
+            const selectedModelId = $(this).val();
+            const $paramsRow = $("#modelParamsRow");
+            $paramsRow.empty();
 
-                    // Для CSV файлов
-                    if (file.name.endsWith(".csv")) {
-                        var text = data.split("\n").slice(0, 5).join("\n"); // Показать первые 5 строк
-                        $("#filePreview").val(text);
-                    }
-                    // Для Excel файлов
-                    else if (file.name.endsWith(".xls") || file.name.endsWith(".xlsx")) {
-                        var workbook = XLSX.read(data, { type: "binary" });
-                        var sheet = workbook.Sheets[workbook.SheetNames[0]];
-                        var rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
-                        var previewData = rows.slice(0, 5).map(row => row.join("\t")).join("\n");
-                        $("#filePreview").val(previewData);
-                    }
-                };
-                reader.readAsBinaryString(file);
+            if (!selectedModelId || !modelParams[selectedModelId]) {
+                $paramsRow.append("<th>Нет параметров для отображения</th>");
+                return;
             }
+
+            // Добавляем параметры в первую строку таблицы
+            modelParams[selectedModelId].forEach(function(param){
+                $paramsRow.append("<th>" + param + "</th>");
+            });
+        });
+
+        // Обработчик выбора файла
+        $("#fileInput").on("change", function (e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            // Чистим тело таблицы (10 строк предпросмотра)
+            $("#fileDataRows").empty();
+
+            const reader = new FileReader();
+            reader.onload = function (event) {
+                const data = event.target.result;
+
+                // Если CSV
+                if (file.name.endsWith(".csv")) {
+                    /* 
+                       Допустим, CSV у вас разделён точкой с запятой ";",
+                       тогда можно так:
+                    */
+                    const rows = data.split("\n").slice(0, 11);
+                    rows.forEach(function (line, index) {
+                        // Разбиваем по ";"
+                        const cells = line.split(";");
+                        // Если в некоторых местах запятая, 
+                        // это нужно дорабатывать под вашу логику
+                        
+                        let rowHtml = "<tr>";
+                        cells.forEach(function (cell) {
+                            rowHtml += "<td>" + cell + "</td>";
+                        });
+                        rowHtml += "</tr>";
+                        $("#fileDataRows").append(rowHtml);
+                    });
+
+                } 
+                // Если Excel
+                else if (file.name.endsWith(".xls") || file.name.endsWith(".xlsx")) {
+                    const workbook = XLSX.read(data, { type: "binary" });
+                    const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+                    // Берём 11 строк (1 + 10 данных)
+                    const previewData = rows.slice(0, 11);
+
+                    previewData.forEach(function (row) {
+                        let rowHtml = "<tr>";
+                        row.forEach(function (cell) {
+                            rowHtml += "<td>" + cell + "</td>";
+                        });
+                        rowHtml += "</tr>";
+                        $("#fileDataRows").append(rowHtml);
+                    });
+                }
+            };
+            reader.readAsBinaryString(file);
         });
 
         // Обработчик кнопки "Загрузить"
-        $("#loadDataBtn").on("click", function() {
-            alert("Данные загружены!");
-            // Здесь будет логика для загрузки данных в систему
+        $("#loadDataBtn").on("click", function () {
+            const fileInput = $("#fileInput")[0];
+            const file = fileInput.files[0];
+            const modelId = $("#modelSelect").val();
+
+            if (!file) {
+                alert("Выберите файл для загрузки.");
+                return;
+            }
+
+            if (!modelId) {
+                alert("Выберите модель.");
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("model_id", modelId);
+            formData.append("csrfmiddlewaretoken", "{{ csrf_token }}");
+
+            $.ajax({
+                url: "{% url 'upload_data' %}",
+                type: "POST",
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    alert("Данные успешно загружены!");
+                },
+                error: function () {
+                    alert("Ошибка при загрузке файла.");
+                },
+            });
         });
 
         // Обработчик кнопки "Отменить"
-        $("#cancelBtn").on("click", function() {
-            // Очистить выбор файла и предпросмотр
+        $("#cancelBtn").on("click", function () {
             $("#fileInput").val("");
-            $("#filePreview").val("Загружаемые данные будут отображаться здесь...");
+            $("#fileDataRows").html(`
+                <tr>
+                    <td colspan="5" class="text-center text-muted">
+                        Данные будут отображаться здесь после выбора файла...
+                    </td>
+                </tr>
+            `);
         });
     });
 </script>
-
 </body>
 </html>

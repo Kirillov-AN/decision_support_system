@@ -5,7 +5,7 @@ from .models import Parameter
 from django.views.generic import TemplateView
 from django.shortcuts import redirect
 from .models import Parameter
-
+from .models import Model
 class Organization_settings(TemplateView):
     template_name = 'organization_settings.html'
 
@@ -13,6 +13,7 @@ class Organization_settings(TemplateView):
         context = super().get_context_data(**kwargs)
         # Передаём все параметры в контекст
         context['parameters'] = Parameter.objects.all()
+        context['models'] = Model.objects.all()
         return context
 
     def post(self, request, *args, **kwargs):

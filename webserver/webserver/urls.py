@@ -23,7 +23,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.Main.as_view(), name='main'),  # Главная страница
     path('data-upload/', include('data_upload.urls')),  # Ссылка на urls.py в data_upload
-    path('/data-upload/', include('data_upload.urls')),  # Ссылка на urls.py в data_upload
     path('organization-settings/', include('organization_settings.urls')),  # Ссылка на urls.py в organization_settings
  #   path('model-execution/', include('model_execution.urls')),  # Ссылка на urls.py в model_execution
 

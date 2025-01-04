@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Настройки организации</title>
+    <title>Настройки</title> <!-- Изменённый заголовок страницы -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
@@ -12,18 +12,15 @@
             padding: 0;
             background-color: #f4f7fc;
         }
-
         .container {
             margin-top: 50px;
         }
-
         .section-header {
-            font-size: 24px;
+            font-size: 20px;
             font-weight: bold;
-            margin-bottom: 20px;
+            margin: 25px 0 15px;
             color: #2c3e50;
         }
-
         .toggle-button {
             background-color: #3498db;
             color: white;
@@ -31,14 +28,11 @@
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            display: block;
             margin: 10px 0;
         }
-
         .toggle-button:hover {
             background-color: #2980b9;
         }
-
         .input-field {
             margin-bottom: 15px;
             padding: 10px;
@@ -46,7 +40,6 @@
             border: 1px solid #ddd;
             border-radius: 5px;
         }
-
         .save-button {
             position: fixed;
             bottom: 20px;
@@ -60,14 +53,27 @@
             font-size: 16px;
             z-index: 100;
         }
-
         .save-button:hover {
             background-color: #2ecc71;
         }
-
+        /* Все дополнительные параметры скрыты одним блоком */
         .advanced-settings {
             display: none;
             margin-top: 20px;
+        }
+        /* Для небольшого отступа между моделями */
+        .model-block {
+            background: #ffffff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+        .model-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #34495e;
+            margin-bottom: 15px;
         }
     </style>
 </head>
@@ -76,7 +82,8 @@
 <!-- HEADER -->
 <header>
     <div class="container text-center">
-        <h1 class="section-header">Настройки организации</h1>
+        <!-- Изменённый заголовок -->
+        <h1 class="section-header">Настройки</h1>
         <p>Задайте важность каждого параметра от 1 до 100:</p>
     </div>
 </header>
@@ -87,32 +94,37 @@
         <form method="POST">
             {% csrf_token %}
 
-            <!-- Параметры Base -->
-            <div class="section-header">Базовые Параметры</div>
-            {% for param in parameters %}
-                {% if param.section == 'base' %}
-                    <label for="param_{{ param.id }}">{{ param.name }}</label>
-                    <input type="number" name="param_{{ param.id }}" id="param_{{ param.id }}" 
-                           value="{{ param.value }}" min="1" max="100" class="input-field">
-                    <br><br>
-                {% endif %}
+            <!-- Перебираем модели -->
+            {% for m in models %}
+                <div class="model-block">
+                    <div class="model-title">{{ m.name }}</div>
+
+                    <!-- Базовые параметры для данной модели -->
+                    <div class="section-header">Базовые Параметры</div>
+                    {% for param in parameters %}
+                        {% if param.model_id == m.id and param.section == 'base' %}
+                            <label for="param_{{ param.id }}">{{ param.name }}</label>
+                            <input type="number" name="param_{{ param.id }}" id="param_{{ param.id }}" 
+                                   value="{{ param.value }}" min="1" max="100" class="input-field">
+                        {% endif %}
+                    {% endfor %}
+
+                    <!-- Дополнительные параметры для данной модели (будут скрыты одним блоком) -->
+                    <div class="advanced-settings" id="advanced-settings-{{ m.id }}">
+                        <div class="section-header">Дополнительные Параметры</div>
+                        {% for param in parameters %}
+                            {% if param.model_id == m.id and param.section == 'advanced' %}
+                                <label for="param_{{ param.id }}">{{ param.name }}</label>
+                                <input type="number" name="param_{{ param.id }}" id="param_{{ param.id }}" 
+                                       value="{{ param.value }}" min="1" max="100" class="input-field">
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                </div>
             {% endfor %}
 
-            <!-- Кнопка для показа Advanced настроек -->
-            <button type="button" class="toggle-button" onclick="toggleAdvancedSettings()">Показать дополнительные настройки</button>
-
-            <!-- Параметры Advanced (будут скрыты по умолчанию) -->
-            <div class="advanced-settings" id="advanced-settings">
-                <div class="section-header">Дополнительные параметры</div>
-                {% for param in parameters %}
-                    {% if param.section == 'advanced' %}
-                        <label for="param_{{ param.id }}">{{ param.name }}</label>
-                        <input type="number" name="param_{{ param.id }}" id="param_{{ param.id }}" 
-                               value="{{ param.value }}" min="1" max="100" class="input-field">
-                        <br><br>
-                    {% endif %}
-                {% endfor %}
-            </div>
+            <!-- Одна кнопка для показа/скрытия advanced-параметров по всем моделям сразу -->
+            <button type="button" class="toggle-button" onclick="toggleAllAdvanced()">Показать дополнительные настройки</button>
 
             <!-- Кнопка для сохранения настроек -->
             <button type="submit" class="save-button">Сохранить настройки</button>
@@ -132,14 +144,20 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
 
 <script>
-    // Функция для показа/скрытия блока дополнительных настроек
-    function toggleAdvancedSettings() {
-        var advancedSection = document.getElementById('advanced-settings');
-        if (advancedSection.style.display === 'none' || advancedSection.style.display === '') {
-            advancedSection.style.display = 'block';
-        } else {
-            advancedSection.style.display = 'none';
-        }
+    function toggleAllAdvanced() {
+        // Получаем все блоки с классом "advanced-settings"
+        const advancedBlocks = document.querySelectorAll('.advanced-settings');
+        // Если хоть один скрыт, тогда покажем все, если все показываем — спрячем все
+        let hasHidden = false;
+        advancedBlocks.forEach(block => {
+            if (block.style.display === '' || block.style.display === 'none') {
+                hasHidden = true;
+            }
+        });
+        // Переключаем все одновременно
+        advancedBlocks.forEach(block => {
+            block.style.display = hasHidden ? 'block' : 'none';
+        });
     }
 </script>
 

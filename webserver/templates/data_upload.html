@@ -67,13 +67,11 @@
             <div class="table-responsive">
                 <table id="previewTable" class="table table-striped table-bordered table-sm">
                     <thead>
-                        <!-- В этот ряд добавляем имена параметров выбранной модели -->
                         <tr id="modelParamsRow">
-                            <!-- Будет заполняться динамически через JS (на основе modelParams) -->
+                            <!-- Здесь будет <th>Variant name</th>, а потом параметры -->
                         </tr>
                     </thead>
                     <tbody id="fileDataRows">
-                        <!-- Здесь будет 10 строк из загруженного файла -->
                         <tr>
                             <td colspan="5" class="text-center text-muted">
                                 Данные будут отображаться здесь после выбора файла...
@@ -98,6 +96,11 @@
 
 <script>
     // Пример: данные имен параметров по каждой модели
+    // modelParams = {
+    //   "1": ["Price per Cup (RUB)", "Supplier Reputation", ...],
+    //   "2": ["Price", "Quality", ...],
+    //   ...
+    // }
     var modelParams = JSON.parse('{{ modelParamsJson|safe }}');
 
     $(document).ready(function () {
@@ -108,11 +111,15 @@
             $paramsRow.empty();
 
             if (!selectedModelId || !modelParams[selectedModelId]) {
+                $paramsRow.append("<th>Variant name</th>");
                 $paramsRow.append("<th>Нет параметров для отображения</th>");
                 return;
             }
 
-            // Добавляем параметры в первую строку таблицы
+            // 1) Вставляем «Variant name» первым столбцом
+            $paramsRow.append("<th>Variant name</th>");
+
+            // 2) Добавляем параметры
             modelParams[selectedModelId].forEach(function(param){
                 $paramsRow.append("<th>" + param + "</th>");
             });
@@ -131,18 +138,15 @@
                 const data = event.target.result;
 
                 // Если CSV
-                if (file.name.endsWith(".csv")) {
+                if (file.name.toLowerCase().endsWith(".csv")) {
                     /* 
                        Допустим, CSV у вас разделён точкой с запятой ";",
                        тогда можно так:
                     */
                     const rows = data.split("\n").slice(0, 11);
-                    rows.forEach(function (line, index) {
-                        // Разбиваем по ";"
+                    rows.forEach(function (line) {
                         const cells = line.split(";");
-                        // Если в некоторых местах запятая, 
-                        // это нужно дорабатывать под вашу логику
-                        
+
                         let rowHtml = "<tr>";
                         cells.forEach(function (cell) {
                             rowHtml += "<td>" + cell + "</td>";
@@ -153,7 +157,7 @@
 
                 } 
                 // Если Excel
-                else if (file.name.endsWith(".xls") || file.name.endsWith(".xlsx")) {
+                else if (file.name.toLowerCase().endsWith(".xls") || file.name.toLowerCase().endsWith(".xlsx")) {
                     const workbook = XLSX.read(data, { type: "binary" });
                     const sheet = workbook.Sheets[workbook.SheetNames[0]];
                     const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });

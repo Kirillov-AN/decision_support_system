@@ -17,9 +17,10 @@
         "model": "organization_settings.parameter",
         "pk": 1,
         "fields": {
-            "name": "Price",
+            "type": 1,
+            "name": "Цена",
             "section": "base",
-            "value": 50,
+            "weight": 50,
             "model": 1
         }
     },
@@ -27,9 +28,10 @@
         "model": "organization_settings.parameter",
         "pk": 2,
         "fields": {
-            "name": "Quality",
+            "type": 1,
+            "name": "Качество",
             "section": "base",
-            "value": 80,
+            "weight": 80,
             "model": 1
         }
     },
@@ -37,21 +39,21 @@
         "model": "organization_settings.parameter",
         "pk": 3,
         "fields": {
-            "name": "Freshness",
+            "type": 1,
+            "name": "Свежесть",
             "section": "advanced",
-            "value": 90,
+            "weight": 90,
             "model": 1
         }
     },
-
-
     {
         "model": "organization_settings.parameter",
         "pk": 4,
         "fields": {
-            "name": "Price per Cup (RUB)",
+            "type": 1,
+            "name": "Цена за стаканчик (руб.)",
             "section": "base",
-            "value": 60,
+            "weight": 60,
             "model": 2
         }
     },
@@ -59,9 +61,10 @@
         "model": "organization_settings.parameter",
         "pk": 5,
         "fields": {
-            "name": "Supplier Reputation",
+            "type": 1,
+            "name": "Репутация поставщика",
             "section": "base",
-            "value": 75,
+            "weight": 75,
             "model": 2
         }
     },
@@ -69,9 +72,10 @@
         "model": "organization_settings.parameter",
         "pk": 6,
         "fields": {
-            "name": "Delivery Time",
+            "type": 1,
+            "name": "Срок доставки",
             "section": "advanced",
-            "value": 40,
+            "weight": 40,
             "model": 2
         }
     },
@@ -79,9 +83,10 @@
         "model": "organization_settings.parameter",
         "pk": 7,
         "fields": {
-            "name": "Batch Size",
+            "type": 3,
+            "name": "Наличие логотипа",
             "section": "base",
-            "value": 0,
+            "weight": 0,
             "model": 2
         }
     },
@@ -89,9 +94,10 @@
         "model": "organization_settings.parameter",
         "pk": 8,
         "fields": {
-            "name": "Brand Logo Availability",
+            "type": 1,
+            "name": "Удобство использования",
             "section": "base",
-            "value": 0,
+            "weight": 0,
             "model": 2
         }
     },
@@ -99,9 +105,10 @@
         "model": "organization_settings.parameter",
         "pk": 9,
         "fields": {
-            "name": "Usability",
+            "type": 3,
+            "name": "Предоставление услуг хранения",
             "section": "base",
-            "value": 0,
+            "weight": 0,
             "model": 2
         }
     },
@@ -109,33 +116,13 @@
         "model": "organization_settings.parameter",
         "pk": 10,
         "fields": {
-            "name": "Volume Occupied (Cubic Meters)",
+            "type": 1,
+            "name": "Затраты на логистику (руб.)",
             "section": "base",
-            "value": 0,
+            "weight": 0,
             "model": 2
         }
     },
-    {
-        "model": "organization_settings.parameter",
-        "pk": 11,
-        "fields": {
-            "name": "Storage Service Provided",
-            "section": "base",
-            "value": 0,
-            "model": 2
-        }
-    },
-    {
-        "model": "organization_settings.parameter",
-        "pk": 12,
-        "fields": {
-            "name": "Logistics Costs (RUB)",
-            "section": "base",
-            "value": 0,
-            "model": 2
-        }
-    },
-
     {
         "model": "organization_settings.variant",
         "pk": 1,
@@ -152,7 +139,6 @@
             "model": "Coffee Seed Supplier Evaluation"
         }
     },
-
     {
         "model": "organization_settings.variant",
         "pk": 3,
@@ -169,14 +155,16 @@
             "model": "Cup Supplier Evaluation"
         }
     },
-
     {
         "model": "organization_settings.parameter_variant",
         "pk": 1,
         "fields": {
             "variant": 1,
             "parameter": 1,
-            "value": 45.0
+            "value": 45.0,
+            "int_value": 45.0,
+            "str_value": null,
+            "bool_value": null
         }
     },
     {
@@ -185,7 +173,10 @@
         "fields": {
             "variant": 1,
             "parameter": 2,
-            "value": 75.0
+            "value": 75.0,
+            "int_value": 75.0,
+            "str_value": null,
+            "bool_value": null
         }
     },
     {
@@ -194,7 +185,10 @@
         "fields": {
             "variant": 2,
             "parameter": 1,
-            "value": 55.0
+            "value": 55.0,
+            "int_value": 55.0,
+            "str_value": null,
+            "bool_value": null
         }
     },
     {
@@ -203,17 +197,22 @@
         "fields": {
             "variant": 2,
             "parameter": 2,
-            "value": 65.0
+            "value": 65.0,
+            "int_value": 65.0,
+            "str_value": null,
+            "bool_value": null
         }
     },
-
     {
         "model": "organization_settings.parameter_variant",
         "pk": 5,
         "fields": {
             "variant": 3,
             "parameter": 4,
-            "value": 62.0
+            "value": 62.0,
+            "int_value": 62.0,
+            "str_value": null,
+            "bool_value": null
         }
     },
     {
@@ -222,7 +221,10 @@
         "fields": {
             "variant": 3,
             "parameter": 5,
-            "value": 80.0
+            "value": 80.0,
+            "int_value": 80.0,
+            "str_value": null,
+            "bool_value": null
         }
     },
     {
@@ -231,7 +233,10 @@
         "fields": {
             "variant": 4,
             "parameter": 4,
-            "value": 70.0
+            "value": 70.0,
+            "int_value": 70.0,
+            "str_value": null,
+            "bool_value": null
         }
     },
     {
@@ -240,9 +245,10 @@
         "fields": {
             "variant": 4,
             "parameter": 5,
-            "value": 78.0
+            "value": 78.0,
+            "int_value": 78.0,
+            "str_value": null,
+            "bool_value": null
         }
     }
-
-
 ]

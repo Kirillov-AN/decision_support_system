@@ -20,10 +20,10 @@ class Organization_settings(TemplateView):
         parameters = Parameter.objects.all()
         for param in parameters:
             # Получаем значение параметра из POST-запроса
-            param_value = request.POST.get(f'param_{param.id}')
-            if param_value:  # Проверяем, есть ли значение
+            param_weight = request.POST.get(f'param_{param.id}')
+            if param_weight:  # Проверяем, есть ли значение
                 try:
-                    param.value = int(param_value)
+                    param.weight = int(param_weight)
                     param.save()
                 except ValueError:
                     pass  # Игнорируем ошибки преобразования

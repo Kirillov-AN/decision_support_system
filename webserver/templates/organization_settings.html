@@ -105,7 +105,7 @@
                         {% if param.model_id == m.id and param.section == 'base' %}
                             <label for="param_{{ param.id }}">{{ param.name }}</label>
                             <input type="number" name="param_{{ param.id }}" id="param_{{ param.id }}" 
-                                   value="{{ param.value }}" min="1" max="100" class="input-field">
+                                   value="{{ param.weight }}" min="1" max="100" class="input-field">
                         {% endif %}
                     {% endfor %}
 
@@ -116,7 +116,7 @@
                             {% if param.model_id == m.id and param.section == 'advanced' %}
                                 <label for="param_{{ param.id }}">{{ param.name }}</label>
                                 <input type="number" name="param_{{ param.id }}" id="param_{{ param.id }}" 
-                                       value="{{ param.value }}" min="1" max="100" class="input-field">
+                                       value="{{ param.weight }}" min="1" max="100" class="input-field">
                             {% endif %}
                         {% endfor %}
                     </div>

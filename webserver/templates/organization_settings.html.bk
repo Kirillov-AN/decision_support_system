@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Настройки</title>
+    <title>Настройки</title> <!-- Изменённый заголовок страницы -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
         body {
@@ -82,8 +82,9 @@
 <!-- HEADER -->
 <header>
     <div class="container text-center">
+        <!-- Изменённый заголовок -->
         <h1 class="section-header">Настройки</h1>
-        <p>Задайте важность каждого параметра от 1 до 100 и укажите ограничения:</p>
+        <p>Задайте важность каждого параметра от 1 до 100:</p>
     </div>
 </header>
 
@@ -108,7 +109,7 @@
                         {% endif %}
                     {% endfor %}
 
-                    <!-- Дополнительные параметры (скрытые) -->
+                    <!-- Дополнительные параметры для данной модели (будут скрыты одним блоком) -->
                     <div class="advanced-settings" id="advanced-settings-{{ m.id }}">
                         <div class="section-header">Дополнительные Параметры</div>
                         {% for param in parameters %}
@@ -119,26 +120,11 @@
                             {% endif %}
                         {% endfor %}
                     </div>
-
-                    <!-- Новый блок с ограничениями для каждой модели -->
-                    <div class="section-header">Ограничения</div>
-                    {% for limit_item in limits %}
-                        {% if limit_item.model_id == m.id %}
-                            <label for="limit_{{ limit_item.id }}">{{ limit_item.name }}</label>
-                            <input type="number" step="any"
-                                   name="limit_{{ limit_item.id }}" 
-                                   id="limit_{{ limit_item.id }}"
-                                   value="{{ limit_item.value }}"
-                                   class="input-field">
-                        {% endif %}
-                    {% endfor %}
                 </div>
             {% endfor %}
 
-            <!-- Одна кнопка для показа/скрытия всех дополнительных параметров -->
-            <button type="button" class="toggle-button" onclick="toggleAllAdvanced()">
-                Показать дополнительные настройки
-            </button>
+            <!-- Одна кнопка для показа/скрытия advanced-параметров по всем моделям сразу -->
+            <button type="button" class="toggle-button" onclick="toggleAllAdvanced()">Показать дополнительные настройки</button>
 
             <!-- Кнопка для сохранения настроек -->
             <button type="submit" class="save-button">Сохранить настройки</button>
@@ -156,18 +142,19 @@
 <!-- Скрипты -->
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
 <script>
     function toggleAllAdvanced() {
         // Получаем все блоки с классом "advanced-settings"
         const advancedBlocks = document.querySelectorAll('.advanced-settings');
-        // Проверяем, скрыт ли хотя бы один блок
+        // Если хоть один скрыт, тогда покажем все, если все показываем — спрячем все
         let hasHidden = false;
         advancedBlocks.forEach(block => {
             if (block.style.display === '' || block.style.display === 'none') {
                 hasHidden = true;
             }
         });
-        // Если есть скрытый блок, показываем все. Иначе скрываем все
+        // Переключаем все одновременно
         advancedBlocks.forEach(block => {
             block.style.display = hasHidden ? 'block' : 'none';
         });

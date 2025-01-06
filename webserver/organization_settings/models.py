@@ -44,4 +44,9 @@ class Parameter_Variant(models.Model):
         return f"{self.variant.name} - {self.parameter.name}"
 
 
-
+class Limit(models.Model):
+    name  = models.CharField(max_length=255)
+    value = models.FloatField()
+    model = models.ForeignKey(Model, on_delete=models.CASCADE, default=1,null=True)
+    def __str__(self):
+        return f"{self.name} - {self.model.name}"

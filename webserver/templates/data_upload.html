@@ -68,7 +68,6 @@
                 <table id="previewTable" class="table table-striped table-bordered table-sm">
                     <thead>
                         <tr id="modelParamsRow">
-                            <!-- Здесь будет <th>Variant name</th>, а потом параметры -->
                         </tr>
                     </thead>
                     <tbody id="fileDataRows">
@@ -111,13 +110,12 @@
             $paramsRow.empty();
 
             if (!selectedModelId || !modelParams[selectedModelId]) {
-                $paramsRow.append("<th>Variant name</th>");
+                $paramsRow.append("<th>Название Варианта</th>");
                 $paramsRow.append("<th>Нет параметров для отображения</th>");
                 return;
             }
 
-            // 1) Вставляем «Variant name» первым столбцом
-            $paramsRow.append("<th>Variant name</th>");
+            $paramsRow.append("<th>Название Варианта</th>");
 
             // 2) Добавляем параметры
             modelParams[selectedModelId].forEach(function(param){
@@ -139,11 +137,8 @@
 
                 // Если CSV
                 if (file.name.toLowerCase().endsWith(".csv")) {
-                    /* 
-                       Допустим, CSV у вас разделён точкой с запятой ";",
-                       тогда можно так:
-                    */
-                    const rows = data.split("\n").slice(0, 11);
+
+                    const rows = data.split("\n").slice(1, 11);
                     rows.forEach(function (line) {
                         const cells = line.split(";");
 
@@ -162,7 +157,7 @@
                     const sheet = workbook.Sheets[workbook.SheetNames[0]];
                     const rows = XLSX.utils.sheet_to_json(sheet, { header: 1 });
                     // Берём 11 строк (1 + 10 данных)
-                    const previewData = rows.slice(0, 11);
+                    const previewData = rows.slice(1, 11);
 
                     previewData.forEach(function (row) {
                         let rowHtml = "<tr>";

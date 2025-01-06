@@ -46,7 +46,7 @@ class Upload_data(TemplateView):
                 df = pd.read_excel(uploaded_file)
             else:
                 return HttpResponse("Unsupported file format", status=400)
-            #print(df.head())
+
             for index, row in df.iterrows():
                 for column_name in df.columns:
                     print(column_name)
@@ -55,8 +55,8 @@ class Upload_data(TemplateView):
                         variant = Variant.objects.create(name=variant_name,model=selected_model)
                     else:
                         value = row[column_name]
-                        filtered_parameter = Parameter.objects.get(  # Учитываем только связанные параметры
-                        name=column_name  # Фильтруем по имени варианта
+                        filtered_parameter = Parameter.objects.get(  
+                        name=column_name  
                         )
                         parameter_type = filtered_parameter.type
                         int_value = None

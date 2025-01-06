@@ -1,0 +1,22 @@
+@startuml
+class Model {
+    __str__()
+        __init__()
+}
+class Parameter {
+    __str__()
+        __init__()
+}
+class Variant {
+    __str__()
+        __init__()
+}
+class Parameter_Variant {
+    __str__()
+        __init__()
+}
+class Limit {
+    __str__()
+        __init__()
+}
+@enduml

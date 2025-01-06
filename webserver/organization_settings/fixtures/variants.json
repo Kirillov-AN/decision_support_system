@@ -1,0 +1,166 @@
+[
+    {
+        "model": "organization_settings.variant",
+        "pk": 1,
+        "fields": {
+            "name": "Supplier A (Coffee Seeds)",
+            "model": "Coffee Seed Supplier Evaluation"
+        }
+    },
+    {
+        "model": "organization_settings.variant",
+        "pk": 2,
+        "fields": {
+            "name": "Supplier B (Coffee Seeds)",
+            "model": "Coffee Seed Supplier Evaluation"
+        }
+    },
+    {
+        "model": "organization_settings.variant",
+        "pk": 3,
+        "fields": {
+            "name": "Supplier A (Cups)",
+            "model": "Cup Supplier Evaluation"
+        }
+    },
+    {
+        "model": "organization_settings.variant",
+        "pk": 4,
+        "fields": {
+            "name": "Supplier B (Cups)",
+            "model": "Cup Supplier Evaluation"
+        }
+    },
+    {
+        "model": "organization_settings.parameter_variant",
+        "pk": 1,
+        "fields": {
+            "variant": 1,
+            "parameter": 1,
+            "int_value": 50.0,
+            "str_value": null,
+            "bool_value": null
+        }
+    },
+    {
+        "model": "organization_settings.parameter_variant",
+        "pk": 2,
+        "fields": {
+            "variant": 1,
+            "parameter": 2,
+            "int_value": 80.0,
+            "str_value": null,
+            "bool_value": null
+        }
+    },
+    {
+        "model": "organization_settings.parameter_variant",
+        "pk": 3,
+        "fields": {
+            "variant": 1,
+            "parameter": 3,
+            "int_value": null,
+            "str_value": "High",
+            "bool_value": null
+        }
+    },
+    {
+        "model": "organization_settings.parameter_variant",
+        "pk": 4,
+        "fields": {
+            "variant": 2,
+            "parameter": 1,
+            "int_value": 55.0,
+            "str_value": null,
+            "bool_value": null
+        }
+    },
+    {
+        "model": "organization_settings.parameter_variant",
+        "pk": 5,
+        "fields": {
+            "variant": 2,
+            "parameter": 2,
+            "int_value": 70.0,
+            "str_value": null,
+            "bool_value": null
+        }
+    },
+    {
+        "model": "organization_settings.parameter_variant",
+        "pk": 6,
+        "fields": {
+            "variant": 2,
+            "parameter": 3,
+            "int_value": null,
+            "str_value": "Medium",
+            "bool_value": null
+        }
+    },
+    {
+        "model": "organization_settings.parameter_variant",
+        "pk": 7,
+        "fields": {
+            "variant": 3,
+            "parameter": 4,
+            "int_value": 45.0,
+            "str_value": null,
+            "bool_value": null
+        }
+    },
+    {
+        "model": "organization_settings.parameter_variant",
+        "pk": 8,
+        "fields": {
+            "variant": 3,
+            "parameter": 5,
+            "int_value": 200,
+            "str_value": null,
+            "bool_value": true
+        }
+    },
+    {
+        "model": "organization_settings.parameter_variant",
+        "pk": 9,
+        "fields": {
+            "variant": 3,
+            "parameter": 6,
+            "int_value": 80.0,
+            "str_value": null,
+            "bool_value": true
+        }
+    },
+    {
+        "model": "organization_settings.parameter_variant",
+        "pk": 10,
+        "fields": {
+            "variant": 4,
+            "parameter": 4,
+            "int_value": 60.0,
+            "str_value": null,
+            "bool_value": null
+        }
+    },
+    {
+        "model": "organization_settings.parameter_variant",
+        "pk": 11,
+        "fields": {
+            "variant": 4,
+            "parameter": 5,
+            "int_value": 250,
+            "str_value": null,
+            "bool_value": false
+        }
+    },
+    {
+        "model": "organization_settings.parameter_variant",
+        "pk": 12,
+        "fields": {
+            "variant": 4,
+            "parameter": 6,
+            "int_value": 85.0,
+            "str_value": null,
+            "bool_value": true
+        }
+    }
+]

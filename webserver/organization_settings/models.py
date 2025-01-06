@@ -36,13 +36,12 @@ class Variant(models.Model):
 class Parameter_Variant(models.Model):
     variant = models.ForeignKey(Variant, on_delete=models.CASCADE, related_name='parameter_values',null=True)
     parameter = models.ForeignKey(Parameter, on_delete=models.CASCADE, related_name='variant_values',null=True)
-    value = models.FloatField()
     int_value = models.FloatField(null=True, blank=True)
     str_value = models.CharField(max_length=255,        null=True, blank=True,)
     bool_value = models.BooleanField(        null=True, blank=True)
 
     def __str__(self):
-        return f"{self.variant.name} - {self.parameter.name}: {self.value}"
+        return f"{self.variant.name} - {self.parameter.name}"
 
 
 

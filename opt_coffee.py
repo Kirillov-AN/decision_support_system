@@ -1,6 +1,10 @@
 import numpy as np
 from pulp import LpMaximize, LpProblem, LpVariable, lpSum
 
+# Домены (топсис, милп)
+# Прикладной слой (юзкейсы)
+# Адаптеры (интерфейсы)
+
 # Ограничения
 MAX_BUDGET_INDEX = 1.0            # Ограничение по финансовому индексу
 MIN_SOCIAL_RATING_INDEX = 0.5     # Минимальный социальный рейтинг

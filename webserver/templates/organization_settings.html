@@ -100,38 +100,33 @@
 
                     <!-- Базовые параметры для данной модели -->
                     <div class="section-header">Базовые Параметры</div>
-                    {% for param in parameters %}
-                        {% if param.model_id == m.id and param.section == 'base' %}
+                    {% for param in m.parameters.base %}
                             <label for="param_{{ param.id }}">{{ param.name }}</label>
                             <input type="number" name="param_{{ param.id }}" id="param_{{ param.id }}" 
                                    value="{{ param.weight }}" min="1" max="100" class="input-field">
-                        {% endif %}
                     {% endfor %}
 
                     <!-- Дополнительные параметры (скрытые) -->
                     <div class="advanced-settings" id="advanced-settings-{{ m.id }}">
                         <div class="section-header">Дополнительные Параметры</div>
-                        {% for param in parameters %}
-                            {% if param.model_id == m.id and param.section == 'advanced' %}
+                        {% for param in  m.parameters.advanced %}
                                 <label for="param_{{ param.id }}">{{ param.name }}</label>
                                 <input type="number" name="param_{{ param.id }}" id="param_{{ param.id }}" 
                                        value="{{ param.weight }}" min="1" max="100" class="input-field">
-                            {% endif %}
                         {% endfor %}
                     </div>
 
                     <!-- Новый блок с ограничениями для каждой модели -->
                     <div class="section-header">Ограничения</div>
-                    {% for limit_item in limits %}
-                        {% if limit_item.model_id == m.id %}
-                            <label for="limit_{{ limit_item.id }}">{{ limit_item.name }}</label>
-                            <input type="number" step="any"
-                                   name="limit_{{ limit_item.id }}" 
-                                   id="limit_{{ limit_item.id }}"
-                                   value="{{ limit_item.value }}"
-                                   class="input-field">
-                        {% endif %}
-                    {% endfor %}
+                    {% for limit_item in m.limits %}
+                    <label for="limit_{{ limit_item.id }}">{{ limit_item.description }}</label>
+                    <input type="number" step="any"
+                           name="limit_{{ limit_item.id }}" 
+                           id="limit_{{ limit_item.id }}"
+                           value="{{ limit_item.value }}"
+                           class="input-field">
+                {% endfor %}
+                
                 </div>
             {% endfor %}
 

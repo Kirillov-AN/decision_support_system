@@ -1,0 +1,8 @@
+[
+    {
+        "model": "organization_settings.model",
+        "pk": 1,
+        "fields": {
+            "name": "Cup Supplier Evaluation"
+        }
+    }]

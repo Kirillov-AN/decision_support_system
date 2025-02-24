@@ -132,3 +132,8 @@ GRAPH_MODELS = {
   'all_applications': True,
   'group_models': True,
 }
+
+
+FIXTURE_DIRS = [
+    BASE_DIR / "webserver" / "model_execution" / "fixtures",
+]

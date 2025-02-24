@@ -12,31 +12,34 @@ class Organization_settings(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # Передаём все параметры в контекст
-        context['parameters'] = Parameter.objects.all()
         context['models'] = Model.objects.all()
-        context['limits'] = Limit.objects.all()
         return context
 
     def post(self, request, *args, **kwargs):
-        parameters = Parameter.objects.all()
-        for param in parameters:
+        models = Model.objects.all()
+        for model in models:
+            print(self.model.parameters.get("base"))
+            params = model.parameters
+            for section in params:
+                param_list = model.parameters[section]
+                for i in param_list:
             # Получаем значение параметра из POST-запроса
-            param_weight = request.POST.get(f'param_{param.id}')
-            if param_weight:  # Проверяем, есть ли значение
-                try:
-                    param.weight = int(param_weight)
-                    param.save()
-                except ValueError:
-                    pass  # Игнорируем ошибки преобразования
-        limits = Limit.objects.all()
-        for limit in limits:
-            limit_size = request.POST.get(f'limit_{limit.id}')
-            if limit_size:
-                try:
-                    limit.value = int(limit_size)
-                    limit.save()
-                except ValueError:
-                    pass  # Игнорируем ошибки преобразования
+                  param_weight = request.POST.get(f'param_{i["id"]}')
+                  if param_weight:  # Проверяем, есть ли значение
+                    try:
+                        i["weight"] = int(param_weight)
+                        model.save()
+                    except ValueError:
+                        pass  # Игнорируем ошибки преобразования
+            limits = model.limits
+            for limit in limits:
+                   limit_size = request.POST.get(f'limit_{limit["id"]}')
+                   if limit_size:
+                    try:
+                        limit["value"] = int(limit_size)
+                        model.save()
+                    except ValueError:
+                        pass  # Игнорируем ошибки преобразования
 
 
         return redirect('organization_settings')  

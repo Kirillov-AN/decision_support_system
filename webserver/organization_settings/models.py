@@ -6,6 +6,9 @@ class Model(models.Model):
     name = models.CharField(max_length=255)
     def __str__(self):
         return f"{self.name}"
+    limits = models.JSONField(blank=True, null=True)
+    parameters = models.JSONField(blank=True, null=True)
+
 
 class Parameter(models.Model):
     SECTION_CHOICES = [
@@ -28,6 +31,7 @@ class Variant(models.Model):
 
     name  = models.CharField(max_length=255)  # Название параметра
     model= models.CharField(max_length=255)  # Значение модели
+    vector =  models.JSONField(blank=True, null=True)
     
 
     def __str__(self):

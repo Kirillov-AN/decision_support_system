@@ -1,8 +1,10 @@
 from django.urls import reverse
 from django.test import TestCase
-from .views import convert_json_to_model_structure , get_list_of_weights, get_dict_of_limits
+#from .views import convert_json_to_model_structure , get_list_of_weights, get_dict_of_limits
 from django.core.management import call_command
 
+from .infra_adapters.infra_adapters import CupsDataSQLRepository
+from .use_cases.use_cases import CupOptimization
 from django.test import TestCase
 
 class ViewTest(TestCase):
@@ -24,21 +26,41 @@ class ViewTest(TestCase):
         self.expected_dict_of_limits = {1:2,2:0.5,3:0.5}
 
 
-    def test_convert_json_to_model_structure(self):
-        print(self.model_id)
-        list_of_list = convert_json_to_model_structure(self.model_id)
+    # def test_convert_json_to_model_structure(self):
+    #     print(self.model_id)
+    #     list_of_list = convert_json_to_model_structure(self.model_id)
 
-        self.assertEqual(list_of_list, self.expected)
+    #     self.assertEqual(list_of_list, self.expected)
 
-    def test_get_list_of_weights(self):
+    # def test_get_list_of_weights(self):
 
 
-        result = get_list_of_weights(self.model_id)
+    #     result = get_list_of_weights(self.model_id)
 
-        self.assertEqual(result, self.expected_weight)
+    #     self.assertEqual(result, self.expected_weight)
 
-    def test_get_dict_of_limits(self):
+    # def test_get_dict_of_limits(self):
 
-        result = get_dict_of_limits(self.model_id)
+    #     result = get_dict_of_limits(self.model_id)
 
-        self.assertEqual(result, self.expected_dict_of_limits)
+    #     self.assertEqual(result, self.expected_dict_of_limits)
+
+    def test_CupsDataSQLRepository(self):
+
+        object = CupsDataSQLRepository(1)
+
+        result = object.get_list_of_weights()
+
+        self.assertEqual(result,self.expected_weight)
+
+        result = object.get_dict_of_limits()
+
+        self.assertEqual(result,self.expected_dict_of_limits)
+
+
+    def test_CupOptimization_init(self):
+        repo = CupsDataSQLRepository("1")
+
+        result = CupOptimization(repo).output()
+        self.assertEqual(result,0.5)
+

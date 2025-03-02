@@ -5,8 +5,8 @@ import json
 import pandas as pd
 import os
 from pulp import LpMaximize, LpProblem, LpVariable, lpSum
-from .infra_adapters.infra_adapters import CupsDataSQLRepository
-from .use_cases.use_cases import CupOptimizationPreparation , CupOptimizationTOPSIS
+from .infra_adapters.infra_adapters import CupsDataSQLRepository , CoffeDataSQLRepository
+from .use_cases.use_cases import CupOptimizationPreparation , CupOptimizationTOPSIS , CoffeOptimizationPreparation , CoffeOptimizationTOPSIS , CoffeOptimizationMILP
 
 from organization_settings.models import Model, Parameter, Variant, Parameter_Variant
 from .optimization_utils import optimal_alternative
@@ -30,25 +30,19 @@ class Model_execution(TemplateView):
     def post(self, request):
 
            model_id = request.POST.get('model_id')
-
-           self.model_controller(model_id)
+           if model_id == "1":
+               self.cups_model_controller(model_id)
+           elif  model_id == "2": 
+               self.coffe_model_controller(model_id)
            return HttpResponse(status=200)
 
-    def model_controller(self, model_id):
-        print(model_id)
-        repository = CupsDataSQLRepository(model_id)
-        if model_id == "1":
-            
-        
+    def cups_model_controller(self, model_id):
+            repository = CupsDataSQLRepository(model_id)
             use_case = CupOptimizationPreparation(repository)
             processed_data = use_case.processed_data
             normalized_indices,indices_array,rank = use_case.calculate_indices(processed_data)
-            print(normalized_indices)
             ratings_list = use_case.calculate_ratings(normalized_indices)
             weights = use_case.weights
-            print(normalized_indices)
-            print(rank,len(indices_array))
-            print(rank / len(indices_array))
     
             if rank / len(indices_array) <= 0.3:
                 print("Применяется MILP оптимизация")
@@ -82,6 +76,52 @@ class Model_execution(TemplateView):
                 print("\nИсходные данные, отсортированные по разнице с идеальным рейтингом:")
                 for rating, entry in sorted_results:
                     print(f"Рейтинг: {rating}, Данные: {entry}")
+
+    def coffe_model_controller(self, model_id):
+                repository = CoffeDataSQLRepository(model_id)
+                use_case = CoffeOptimizationPreparation(repository)
+                processed_data = use_case.processed_data
+                normalized_indices,indices_array,rank = use_case.calculate_indices(processed_data)
+                ratings_list = use_case.calculate_ratings(normalized_indices)
+                weights = use_case.weights
+                if rank / len(indices_array) <= 0.3:
+                    print("Применяется MILP оптимизация")
+                    milp = CoffeOptimizationMILP()
+                    selected_index, optimal_rating = milp.milp_optimization(normalized_indices, ratings_list,use_case.MAX_BUDGET_INDEX , use_case.MIN_SOCIAL_RATING_INDEX , use_case.MIN_QUALITY_INDEX )
+                    if selected_index is not None:
+                        print(f"Выбрана альтернатива: {processed_data[selected_index]}")
+                        print(f"Оптимальный рейтинг: {optimal_rating}")
+                    else:
+                        print("Оптимальное решение не найдено")
+                else:
+                    print("Применяется TOPSIS методика анализа")
+                    topsis = CoffeOptimizationTOPSIS()
+            
+                    ideal_combination = topsis.get_best_combination(processed_data)
+                    print(ideal_combination)
+                    ideal_indices, _ , _ = use_case.calculate_indices([ideal_combination])
+                    ideal_indices = ideal_indices[0]
+                    ideal_rating = use_case.calculate_ratings([ideal_indices])[0]
+            
+                    sorted_results = sorted(zip(ratings_list, processed_data), key=lambda pair: abs(pair[0] - ideal_rating))
+            
+                    print("Матрица индексов:")
+                    for idx in normalized_indices:
+                        print(idx)
+            
+                    print("\nИдеальный вариант (по индексам):")
+                    print(ideal_indices)
+                    print(f"Рейтинг идеального варианта: {ideal_rating}")
+
+                    print("\nИсходные данные, отсортированные по разнице с идеальным рейтингом:")
+                    for rating, entry in sorted_results:
+                        print(f"Рейтинг: {rating}, Данные: {entry}")
+
+
+    
+
+
+
 
 
 

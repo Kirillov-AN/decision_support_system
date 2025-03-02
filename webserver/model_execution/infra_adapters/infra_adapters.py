@@ -1,6 +1,6 @@
 from django.shortcuts import  get_object_or_404
 from organization_settings.models import Model
-from ..use_cases.use_cases import CupRepositoryInterface
+from ..use_cases.use_cases import CupRepositoryInterface , CoffeRepositoryInterface
 from organization_settings.models import Variant
 
 
@@ -45,6 +45,47 @@ class CupsDataSQLRepository(CupRepositoryInterface):
            dict_of_limits[i["id"]] = i["value"]
         return dict_of_limits
 
+class CoffeDataSQLRepository(CoffeRepositoryInterface):
+
+    def __init__(self,model_id):
+        self.model_id = model_id
+
+    def get_transformed_data(self):
+        # Предположим, что для кофейной модели pk=2
+        variants = Variant.objects.filter(model=2)
+        vectors = []
+        for v in variants:
+            roaster_name = v.name
+            row = [
+            v.vector["Цена за один кг"],
+            v.vector["Размер партии"],
+            v.vector["Известность обжарщика"],
+            v.vector["Репутация обжарщика"],
+            v.vector["Гарантии обжарщика"],
+            v.vector["Затраты на логистику"],
+            v.vector["Уровень сервисных услуг"],
+            v.vector["Срок доставки"],
+            roaster_name  # Сохраняем имя в конце, чтобы не сдвигать индексы
+            ]
+            vectors.append(row)
+        return vectors
+
+
+    def get_list_of_weights(self):
+        params_dict = get_object_or_404(Model, id=self.model_id).parameters
+        
+        base_weights = [item["weight"] for item in params_dict["base"]]
+        advanced_weights = [item["weight"] for item in params_dict["advanced"]]
+    
+        list_of_weights = base_weights + advanced_weights
+        return list_of_weights
+    
+    def get_dict_of_limits(self):
+        limits = get_object_or_404(Model, id=self.model_id).limits
+        dict_of_limits = {}
+        for i in limits:
+           dict_of_limits[i["id"]] = i["value"]
+        return dict_of_limits
 
 # class GetWeightsAndLimits():
 
